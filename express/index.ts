@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors());
 const pool = new pg.Pool({
   connectionString: "postgres://postgres:postgres@db.default.svc.cluster.local:5432/postgres",
+  // connectionString: "postgres://postgres:postgres@localhost:5432/postgres",
 });
 
 app.get("/users", async (req, res) => {
@@ -19,15 +20,20 @@ app.post("/users", async (req, res) => {
   res.json(result.rows[0]);
 });
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
 
 async function initDb() {
-  await pool.query(`CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-  )`);
+  try {
+    await pool.query(`CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL
+    )`);
+    
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  } catch (err){
+    console.error("Error initializing database: ", err);
+  }
 }
 
 initDb();
