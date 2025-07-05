@@ -6,3 +6,6 @@ things learnt
 
 
 request hits the loadbalancer external IP address and hits the nginx reverse proxy (ingress) which reverse proxies it to frontend or backend depending on where the request is coming from
+DB is initialized into kube itself
+
+
